@@ -378,7 +378,7 @@ function frame(timestamp) {
   interior.update(dt, spin);
   earth.update(dt, spin, state.toggles);
   magnetosphere.update(dt, spin, state.toggles, vis[INTERIOR_COUNT - 1] > 0.5);
-  seismic.update(dt, scale.schematic.toFixed(4));
+  seismic.update(dt, scale.schematic.toFixed(4), vis[INTERIOR_COUNT - 1] > 0.99);
 
   rig.update(dt);
   controls.update();

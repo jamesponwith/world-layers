@@ -277,8 +277,11 @@ export function createSeismic() {
     stop() {
       state.active = false;
     },
-    update(dt, scaleKey) {
+    // `intact` is false once the outer layers are peeled away; the rays would
+    // otherwise hang in empty space, so the quake ends and fades out quickly.
+    update(dt, scaleKey, intact = true) {
       if (!group.visible) return;
+      if (!intact) state.active = false;
       if (scaleKey !== lastScaleKey) {
         rebuildGeometry();
         lastScaleKey = scaleKey;
@@ -287,7 +290,7 @@ export function createSeismic() {
         state.clock += dt * state.speed;
         if (state.clock > duration) state.active = false;
       } else {
-        state.fade = Math.max(0, state.fade - dt * 0.5);
+        state.fade = Math.max(0, state.fade - dt * (intact ? 0.5 : 3));
         if (state.fade <= 0) group.visible = false;
       }
       const clock = state.clock;
